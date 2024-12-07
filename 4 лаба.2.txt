@@ -1,0 +1,68 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <ctime>
+#include <limits>
+
+using namespace std;
+
+// Функция для создания входного файла
+void createInputFile(const string& filename, int count) {
+    ofstream inputFile(filename);
+
+    srand((time(0))); // Инициализация генератора случайных чисел
+
+    for (int i = 0; i < count; ++i) {
+        int number = rand() % 101 - 50; // Генерация чисел от -50 до +50
+        inputFile << number << endl;
+    }
+
+    inputFile.close();
+}
+
+// Функция для обработки данных из входного файла и записи в выходной
+void processFile(const string& inputFilename, const string& outputFilename) {
+    ifstream inputFile(inputFilename);
+
+
+    // Первый проход для нахождения минимального числа
+    int minNumber = numeric_limits<int>::max(); // Инициализация максимальным значением
+    int number;
+    while (inputFile >> number) {
+        if (number < minNumber) {
+            minNumber = number;
+        }
+    }
+    inputFile.close();
+
+    // Второй проход для обработки и записи данных
+    inputFile.open(inputFilename);
+    ofstream outputFile(outputFilename);
+
+
+    while (inputFile >> number) {
+        if (number > 0) {
+            outputFile << minNumber * minNumber << endl; // Квадрат минимального числа
+        }
+        else {
+            outputFile << number << endl; // Неположительные числа остаются неизменными
+        }
+    }
+
+    inputFile.close();
+    outputFile.close();
+}
+
+int main() {
+    const string inputFilename = "input.txt";
+    const string outputFilename = "output.txt";
+
+    // Шаг 1: Создание входного файла
+    createInputFile(inputFilename, 100);
+
+    // Шаг 2: Обработка данных и создание выходного файла
+    processFile(inputFilename, outputFilename);
+
+
+    return 0;
+}
