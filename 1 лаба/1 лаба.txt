@@ -1,0 +1,63 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+class CustomException : public std::exception {
+private:
+    std::string errorMessage;
+    double errorValue;
+    int errorCode;
+
+public:
+    CustomException(const std::string& message, double value, int code) : errorMessage(message), errorValue(value), errorCode(code) {}
+
+    const char* what() const throw() {
+        return errorMessage.c_str();
+    }
+
+    double getErrorValue() const {
+        return errorValue;
+    }
+
+    int getErrorCode() const {
+        return errorCode;
+    }
+};
+
+double calculateZ1(double& x) {
+    if (x == -2 || x == 2) {
+        throw CustomException("Division by zero is not allowed", x, 1);
+    }
+
+    double z1 = (std::sqrt(2 * std::sqrt(x * x - 4) + 2 * x)) / (x + std::sqrt(x * x - 4) + 2);
+
+    return z1;
+}
+
+double calculateZ2(double& x) {
+    if (x == -2) {
+        throw CustomException("Division by zero is not allowed", x, 1);
+    }
+
+    double z2 = 1 / std::sqrt(x + 2);
+
+    return z2;
+}
+
+int main() {
+    double x = 3;
+
+    try {
+        double resultZ1 = calculateZ1(x);
+        double resultZ2 = calculateZ2(x);
+
+        std::cout << "Z1: " << resultZ1 << std::endl;
+        std::cout << "Z2: " << resultZ2 << std::endl;
+    } catch (CustomException& ex) {
+        std::cerr << "Custom Exception caught: " << ex.what() << std::endl;
+        std::cerr << "Error value: " << ex.getErrorValue() << std::endl;
+        std::cerr << "Error code: " << ex.getErrorCode() << std::endl;
+    }
+
+    return 0;
+}
