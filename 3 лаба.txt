@@ -1,0 +1,58 @@
+#include <iostream>
+#include <list> // Подключаем стандартный класс List
+
+template <typename T, typename Container = std::list<T>>
+class Queue {
+private:
+    Container container; // Используем контейнер для хранения элементов
+
+public:
+    // Добавление элемента в очередь
+    void enqueue(const T& value) {
+        container.push_back(value); // Добавляем элемент в конец
+    }
+
+    // Удаление элемента из очереди
+    void dequeue() {
+        if (!container.empty()) {
+            container.pop_front(); // Удаляем элемент из начала
+        } else {
+            throw std::out_of_range("Queue is empty");
+        }
+    }
+
+    // Получение первого элемента очереди
+    T front() const {
+        if (!container.empty()) {
+            return container.front(); // Возвращаем первый элемент
+        } else {
+            throw std::out_of_range("Queue is empty");
+        }
+    }
+
+    // Проверка, пуста ли очередь
+    bool isEmpty() const {
+        return container.empty();
+    }
+
+    // Получение размера очереди
+    size_t size() const {
+        return container.size();
+    }
+};
+
+int main() {
+    Queue<int> q; // Создаем очередь для целых чисел
+
+    q.enqueue(1);
+    q.enqueue(2);
+    q.enqueue(3);
+
+    std::cout << "Front element: " << q.front() << std::endl; // Выводим первый элемент
+
+    q.dequeue(); // Удаляем первый элемент
+
+    std::cout << "Front element after dequeue: " << q.front() << std::endl; // Выводим новый первый элемент
+
+    return 0;
+}
