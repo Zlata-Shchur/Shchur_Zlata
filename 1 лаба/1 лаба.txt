@@ -1,6 +1,6 @@
-#include <iostream>     // Подключение библиотеки ввода/вывода
-#include <string>       // Подключение библиотеки для работы со строками
-#include <cmath>        // Подключение библиотеки математических функций
+#include <iostream>     
+#include <string>       
+#include <cmath>        
 
 // Объявление класса CustomException, который наследует std::exception
 class CustomException : public std::exception {
