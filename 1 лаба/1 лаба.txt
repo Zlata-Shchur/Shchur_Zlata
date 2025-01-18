@@ -1,63 +1,79 @@
-#include <iostream>
-#include <string>
-#include <cmath>
+#include <iostream>     // Подключение библиотеки ввода/вывода
+#include <string>       // Подключение библиотеки для работы со строками
+#include <cmath>        // Подключение библиотеки математических функций
 
+// Объявление класса CustomException, который наследует std::exception
 class CustomException : public std::exception {
 private:
-    std::string errorMessage;
-    double errorValue;
-    int errorCode;
+    std::string errorMessage; // Сообщение об ошибке
+    double errorValue;        // Значение, вызвавшее ошибку
+    int errorCode;            // Код ошибки
 
 public:
-    CustomException(const std::string& message, double value, int code) : errorMessage(message), errorValue(value), errorCode(code) {}
+    // Конструктор, принимающий сообщение об ошибке, значение и код ошибки
+    CustomException(const std::string& message, double value, int code) 
+        : errorMessage(message), errorValue(value), errorCode(code) {}
 
+    // Метод для получения сообщения об ошибке
     const char* what() const throw() {
         return errorMessage.c_str();
     }
 
+    // Метод для получения значения, вызвавшего ошибку
     double getErrorValue() const {
         return errorValue;
     }
 
+    // Метод для получения кода ошибки
     int getErrorCode() const {
         return errorCode;
     }
 };
 
+// Функция для вычисления значения z1 на основе переменной x
 double calculateZ1(double& x) {
+    // Проверка на деление на ноль (если x равно -2 или 2)
     if (x == -2 || x == 2) {
         throw CustomException("Division by zero is not allowed", x, 1);
     }
 
+    // Вычисление значения z1
     double z1 = (std::sqrt(2 * std::sqrt(x * x - 4) + 2 * x)) / (x + std::sqrt(x * x - 4) + 2);
 
     return z1;
 }
 
+// Функция для вычисления значения z2 на основе переменной x
 double calculateZ2(double& x) {
+    // Проверка на деление на ноль (если x равно -2)
     if (x == -2) {
         throw CustomException("Division by zero is not allowed", x, 1);
     }
 
+    // Вычисление значения z2
     double z2 = 1 / std::sqrt(x + 2);
 
     return z2;
 }
 
+// Главная функция программы
 int main() {
-    double x = 3;
+    double x = 3; // Инициализация переменной x значением 3
 
     try {
+        // Попытка вычислить значения z1 и z2
         double resultZ1 = calculateZ1(x);
         double resultZ2 = calculateZ2(x);
 
+        // Вывод результатов вычислений на экран
         std::cout << "Z1: " << resultZ1 << std::endl;
         std::cout << "Z2: " << resultZ2 << std::endl;
     } catch (CustomException& ex) {
+        // Обработка исключений: вывод сообщения об ошибке, значения и кода ошибки
         std::cerr << "Custom Exception caught: " << ex.what() << std::endl;
         std::cerr << "Error value: " << ex.getErrorValue() << std::endl;
         std::cerr << "Error code: " << ex.getErrorCode() << std::endl;
     }
 
-    return 0;
+    return 0; // Завершение программы с кодом 0
 }
